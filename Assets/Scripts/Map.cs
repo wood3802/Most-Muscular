@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public interface ICustomMapTarget: IEventSystemHandler
-{
-    Vector3[] createPath(Vector3 enemyPos);
-
-}
-
-public class Map : MonoBehaviour, ICustomMapTarget
+public class Map : MonoBehaviour
 {
     public int x, y;
     int[,] map;
     public GameObject wall;
     GameObject[] walls;
+    public GameObject wallsObject;
     
     // Start is called before the first frame update
     void Start()
@@ -27,6 +22,7 @@ public class Map : MonoBehaviour, ICustomMapTarget
             {
                 map[i, j] = 1;
                 walls[i * y + j] = Instantiate<GameObject>(wall, new Vector3(i, 0, j), Quaternion.identity);
+                walls[i * y + j].transform.parent = wallsObject.transform;
                 if(i != 0 && j != 0 && j != map.GetLength(1)-1 && i != map.GetLength(0)-1)
                 {
                     walls[i * y + j].SetActive(false);
@@ -35,11 +31,4 @@ public class Map : MonoBehaviour, ICustomMapTarget
             }
         }
     }
-    
-    public Vector3[] createPath(Vector3 enemyPos)
-    {
-        
-        return new Vector3[1];
-    }
-    //Write pathfinding function and send it back to AI units
 }
